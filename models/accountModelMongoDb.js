@@ -72,9 +72,9 @@ async function close() {
 // CRUD 
 // =================================================================
 /**
- * Method creates a pokemon object and adds it to the MongoDB specified collection.
- * @param {*} username of pokemon to create.
- * @param {*} password of pokemon to create.
+ * Method creates an account object and adds it to the MongoDB specified collection.
+ * @param {*} username of account to create.
+ * @param {*} password of account to create.
  * @returns pokemon object if successful.
  * @throws InvalidInputError if the type or name of pokemon is invalid.
  */
@@ -84,19 +84,19 @@ async function addAccount(username, password){
         if(validateUtils.isValid2(username,password)){
             // creates and returns new pokemon object
             if(await !accountCollection.insertOne( { name: username, type: password } ))
-                throw new DatabaseError(`Error while inserting pokemon: ${username}, ${password}`);
+                throw new DatabaseError(`Error while inserting account into db: ${username}, ${password}`);
             
             return { name: username, type: password };
         }
         
     } catch (err) {
         if(err instanceof InvalidInputError){
-            console.log("Input Error while adding pokemon: " + err.message);
+            console.log("Input Error while adding account: " + err.message);
         }
         if(err instanceof DatabaseError){
-            console.log("Database Error while adding pokemon: " + err.message);
+            console.log("Database Error while adding account: " + err.message);
         }else{
-            console.log("Unexpected error while adding pokemon: " + err.message);
+            console.log("Unexpected error while adding account: " + err.message);
         }
         throw err;
     }
@@ -104,13 +104,13 @@ async function addAccount(username, password){
 
 }
 /**
- * Queries database for a single instance of pokemon with the name
+ * Queries database for a single instance of an account with the username
  * that was passed in.
  * @param {*} pokemonName to find in database.
  * @returns Pokemon object or Undefined if pokemon was not found.
  * @throws DatabaseError if fails to read from database.
  */
-async function getSinglePokemon(pokemonName){
+async function getSingleAccount(pokemonName){
     // Try reading from database
     let pokemon;
     try {
@@ -129,7 +129,7 @@ async function getSinglePokemon(pokemonName){
  * @returns array containing pokemon objects.
  * @throws DatabaseError if query is unsuccessful.
  */
-async function getAllPokemon(){
+async function getAllAccounts(){
     let pokemonsArray;
     // Try reading from database and converting result to an array
     try {
@@ -151,7 +151,7 @@ module.exports = {
     initialize,
     close,
     addAccount,
-    getSinglePokemon,
-    getAllPokemon,
+    getSingleAccount,
+    getAllAccounts,
     getCollection
 }
