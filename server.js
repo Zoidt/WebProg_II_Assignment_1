@@ -45,7 +45,7 @@ http.createServer(async function (request,response) {
 async function handleAddAccount(username, password){
     try {
         // Create pokemon object
-        let account = await model.addPokemon(username, password);
+        let account = await model.addAccount(username, password);
         
         // Check edge cases where pokemon returns null
         if(account == null)

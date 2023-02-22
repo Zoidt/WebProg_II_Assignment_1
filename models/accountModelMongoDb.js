@@ -39,6 +39,7 @@ async function initialize(accountCollectionName, reset, url){
         accountCollection = db.collection(accountCollectionName); // convenient access to collection
 
         // if reset is true, drop database and create new one
+        // TODO: Add following code as else in the first if statement?, this avoids some repeating code 
         if (reset == true){
             // drop collection and create new one 
             accountCollection.drop();
@@ -77,7 +78,7 @@ async function close() {
  * @returns pokemon object if successful.
  * @throws InvalidInputError if the type or name of pokemon is invalid.
  */
-async function addUser(username, password){
+async function addAccount(username, password){
     try {
         // check for valid name and type
         if(validateUtils.isValid2(username,password)){
@@ -149,7 +150,7 @@ async function getCollection(){
 module.exports = {
     initialize,
     close,
-    addPokemon: addUser,
+    addPokemon: addAccount,
     getSinglePokemon,
     getAllPokemon,
     getCollection

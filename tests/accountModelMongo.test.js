@@ -77,7 +77,7 @@ afterEach(async () => {
 // Add test 
 test("Can add pokemon to DB", async () => {
     const { name, type } = generatePokemonData();
-    await model.addPokemon(name,type) // add pokemon to database 
+    await model.addAccount(name,type) // add pokemon to database 
     
     // Query database
     const cursor = await model.getCollection();
