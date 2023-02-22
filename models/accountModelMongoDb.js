@@ -152,8 +152,20 @@ async function getCollection(){
 }
 
 // TODO: updateOne
-async function updateOneUsername(){
+async function updateOneUsername(currentUsername, newUsername){
 
+    try {
+        // check if username exists
+        const account = await getSingleAccount(currentUsername);
+
+        
+        
+    } catch (error) {
+        if(error instanceof DatabaseError)
+            console.log("Error while reading account data from database:" + error.message);
+        if(error instanceof InvalidInputError)
+            console.log("Error while updating account data from database" + error.message);
+    }
 }
 async function updateOnePassword(){
 
@@ -167,6 +179,7 @@ async function updateOnePassword(){
 
 // TODO: deleteMany
 
+// TODO: isExists (validation for adding/update/delete)
 module.exports = {
     initialize,
     close,
