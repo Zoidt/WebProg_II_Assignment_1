@@ -87,7 +87,7 @@ async function addAccount(username, password){
             if(await !accountCollection.insertOne( { name: username, type: password } ))
                 throw new DatabaseError(`Error while inserting account into db: ${username}, ${password}`);
             
-            return { name: username, type: password };
+            return { username: username, password: password };
         }
         
     } catch (err) {
