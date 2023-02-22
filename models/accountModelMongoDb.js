@@ -116,7 +116,7 @@ async function getSingleAccount(username){
     let account;
     try {
         // Query database
-        account = await accountCollection.findOne({name: username});
+        account = await accountCollection.findOne({username: username});
 
     } catch (error) {
         throw new DatabaseError("Error while reading account data from database: " + error.message)

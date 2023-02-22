@@ -73,12 +73,12 @@ async function handleReadAccount(accountName){
         // Check edge case where pokemon returns null
         if(account == null)
             return `Read Account failed \nAccount with name: "${accountName}", was not found\n==============\n`;
-        else return `Read Account successful, \nName: ${account.name} \nType: ${account.type} \n==============\n`;
+        else return `Read Account successful, \nUsername: ${account.username} \nPassword: ${account.password} \n==============\n`;
 
     } catch (err) {
         // Various Error Messages
          if( err instanceof DatabaseError){
-            return `Adding Pokemon Failed: ${err.message}\n==============\n`;
+            return `Reading Account Failed: ${err.message}\n==============\n`;
          }else{
              return `****** Unexpected error, check logs:\n${err.message}\n==============\n`;
          }
