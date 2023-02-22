@@ -16,7 +16,7 @@ let accountCollection;
  * Use the database with the name stored in dbName and the collection "pokemons"
  * Will create the "pokemons" collection if it doesn't exist.
  * @param {*} accountCollectionName Name of collection to create or connect to 
- * @param {*} reset If true new collection will be created after deleted the old. Otherwise connect to existing collection
+ * @param {*} reset If true new collection will be created after deleted old. Otherwise connect to existing collection
  * @param {*} url MongoDB login URL 
  */
 async function initialize(accountCollectionName, reset, url){
@@ -36,21 +36,18 @@ async function initialize(accountCollectionName, reset, url){
             // No match was found so create new collection
             await db.createCollection(accountCollectionName, {collation: collation});
         }
-        account
-    Collection = db.collection(accountCollectionName); // convenient access to collection
+        accountCollection = db.collection(accountCollectionName); // convenient access to collection
 
         // if reset is true, drop database and create new one
         if (reset == true){
             // drop collection and create new one 
-            account
-        Collection.drop();
+            accountCollection.drop();
             // collation specifying case-insensitive collection
             const collation = { locale: "en", strength: 1 };
             // Create new collection since old was dropped
             await db.createCollection(accountCollectionName, {collation: collation});
 
-            account
-        Collection = db.collection(accountCollectionName); // convenient access to collection
+            accountCollection = db.collection(accountCollectionName); // convenient access to collection
         }
     } catch (err) {
         console.log(err.message);
@@ -85,8 +82,7 @@ async function addUser(username, password){
         // check for valid name and type
         if(validateUtils.isValid2(username,password)){
             // creates and returns new pokemon object
-            if(await !account
-            Collection.insertOne( { name: username, type: password } ))
+            if(await !accountCollection.insertOne( { name: username, type: password } ))
                 throw new DatabaseError(`Error while inserting pokemon: ${username}, ${password}`);
             
             return { name: username, type: password };
@@ -118,8 +114,7 @@ async function getSinglePokemon(pokemonName){
     let pokemon;
     try {
         // Query database
-        pokemon = await account
-    Collection.findOne({name: pokemonName});
+        pokemon = await accountCollection.findOne({name: pokemonName});
 
     } catch (error) {
         throw new DatabaseError("Error while reading pokemon data from database: " + error.message)
@@ -129,8 +124,7 @@ async function getSinglePokemon(pokemonName){
 }
 /**
  * Query all pokemon objects inside a MongoDb collection.
- * Collection specified by account
- *Collection.
+ * Collection specified by accountCollection.
  * @returns array containing pokemon objects.
  * @throws DatabaseError if query is unsuccessful.
  */
@@ -138,8 +132,7 @@ async function getAllPokemon(){
     let pokemonsArray;
     // Try reading from database and converting result to an array
     try {
-        pokemonsArray = await account
-    Collection.find().toArray();
+        pokemonsArray = await accountCollection.find().toArray();
        return pokemonsArray;
 
     } catch (error) {
@@ -148,12 +141,10 @@ async function getAllPokemon(){
 }
 /**
  * Helper function to manipulate the current collection
- * @returns account
- *Collection
+ * @returns accountCollection
  */
 async function getCollection(){
-    return await account
-Collection;
+    return await accountCollection;
 }
 module.exports = {
     initialize,
