@@ -81,6 +81,8 @@ async function close() {
  */
 async function addAccount(username, password){
     try {
+        // TODO: cannot add two of same pokemon
+            // check if pokemon already exists by querying database
         // check for valid name and type
         if(validateUtils.isValid2(username,password)){
             // creates and returns new account object if successful
@@ -149,7 +151,13 @@ async function getCollection(){
     return await accountCollection;
 }
 
-// TODO: update One
+// TODO: updateOne
+async function updateOneUsername(){
+
+}
+async function updateOnePassword(){
+
+}
 
 // TODO: updateMany
 
