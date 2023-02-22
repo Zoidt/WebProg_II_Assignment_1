@@ -157,14 +157,24 @@ async function updateOneUsername(currentUsername, newUsername){
     try {
         // check if username exists
         const account = await getSingleAccount(currentUsername);
-
         
+        // filter for account
+        const filter = {username: currentUsername};
+        // information we want to change
+        const updateDoc = {
+            $set: {username: newUsername}
+        }
+
+
         
     } catch (error) {
         if(error instanceof DatabaseError)
-            console.log("Error while reading account data from database:" + error.message);
+            console.log("Error while updating account data to database:" + error.message);
         if(error instanceof InvalidInputError)
             console.log("Error while updating account data from database" + error.message);
+        else 
+            console.log("Unexpected error: " + error.message);
+        throw error;
     }
 }
 async function updateOnePassword(){
