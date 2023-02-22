@@ -2,7 +2,7 @@ const { MongoClient, ListCollectionsCursor } = require("mongodb");
 const { DatabaseError } = require("./DatabaseError");
 const { InvalidInputError } = require("./InvalidInputError");
 const validateUtils = require("./validateUtils");
-const dbName = "user_account_db_tests"; // OG : pokemon_db, Test: pokemon_db_tests
+const dbName = "user_account_db"; // Main: user_account_db, Test: user_account_db_test
 
 let client;
 let accountCollection;
