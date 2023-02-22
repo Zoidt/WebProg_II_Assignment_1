@@ -18,7 +18,9 @@ http.createServer(async function (request,response) {
     // =================================================================
     // Create
     // =================================================================
-    response.write(await handleAddPokemon("Pikachu","Electric"))
+
+    // TODO: Static normal names/usernames, then fakerJS
+    response.write(await handleAddUser("Pikachu","Electric"))
 
     // =================================================================
     // Read
@@ -35,25 +37,25 @@ http.createServer(async function (request,response) {
 }).listen(port);
 
 /**
- * Helper function when creating and validation pokemon objects to be added to mongodb database
- * @param {*} pokemonName to add to database
- * @param {*} pokemonType to add to database
+ * Helper function when creating and validation user objects to be added to mongodb database
+ * @param {*} username to add to database
+ * @param {*} password to add to database
  * @returns String containing success or failure messages
  */
-async function handleAddPokemon(pokemonName, pokemonType){
+async function handleAddUser(username, password){
     try {
         // Create pokemon object
-        let pokemon = await model.addPokemon(pokemonName, pokemonType);
+        let user = await model.addPokemon(username, password);
         
-        // Check edgecase where pokemon returns null
-        if(pokemon == null)
-            throw new Error(`ERROR Got null result when adding. Should never happen. \nFailed Data: "${pokemonName}", "${pokemonType}" \n==============\n`)
-        else return `Adding pokemon successful, \nName: ${pokemon.name} \nType: ${pokemon.type} \n==============\n`;
+        // Check edge cases where pokemon returns null
+        if(user == null)
+            throw new Error(`ERROR Got null result when adding. Should never happen. \nFailed Data: "${username}", "${password}" \n==============\n`)
+        else return `Creating account successful, \nUsername: ${user.username} \nPassword: ${user.password} \n==============\n`;
 
     } catch (err) {
         // Various Error Messages
         if ( error instanceof InvalidInputError){
-            return `Adding Pokemon Failed: ${err.message}\nFailed Data: "${pokemonName}", "${pokemonType}" \n==============\n`;
+            return `Adding Pokemon Failed: ${err.message}\nFailed Data: "${username}", "${password}" \n==============\n`;
          }
          else if( error instanceof DatabaseError){
             return `Adding Pokemon Failed: ${err.message}\n==============\n`;

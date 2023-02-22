@@ -72,20 +72,20 @@ async function close() {
 // =================================================================
 /**
  * Method creates a pokemon object and adds it to the MongoDB specified collection.
- * @param {*} pokemonName of pokemon to create.
- * @param {*} pokemonType of pokemon to create.
+ * @param {*} username of pokemon to create.
+ * @param {*} password of pokemon to create.
  * @returns pokemon object if successful.
  * @throws InvalidInputError if the type or name of pokemon is invalid.
  */
-async function addPokemon(pokemonName, pokemonType){
+async function addUser(username, password){
     try {
         // check for valid name and type
-        if(validateUtils.isValid2(pokemonName,pokemonType)){
+        if(validateUtils.isValid2(username,password)){
             // creates and returns new pokemon object
-            if(await !pokemonsCollection.insertOne( { name: pokemonName, type: pokemonType } ))
-                throw new DatabaseError(`Error while inserting pokemon: ${pokemonName}, ${pokemonType}`);
+            if(await !pokemonsCollection.insertOne( { name: username, type: password } ))
+                throw new DatabaseError(`Error while inserting pokemon: ${username}, ${password}`);
             
-            return { name: pokemonName, type: pokemonType };
+            return { name: username, type: password };
         }
         
     } catch (err) {
@@ -149,7 +149,7 @@ async function getCollection(){
 module.exports = {
     initialize,
     close,
-    addPokemon,
+    addPokemon: addUser,
     getSinglePokemon,
     getAllPokemon,
     getCollection
