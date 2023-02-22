@@ -1,10 +1,12 @@
-require('dotenv').config();
 const http = require('http');
 const { DatabaseError } = require('./models/DatabaseError');
 const { InvalidInputError } = require('./models/InvalidInputError');
+require('dotenv').config();
 const port = 1339;
 const model = require("./models/pokemonModelMongoDb");
-const pokemonsCollectionName = "pokemons"
+const pokemonsCollectionName = "pokemons";
+require('dotenv').config();
+
 const url = process.env.URL_PRE + process.env.MONGODB_PWD + process.env.URL_POST;
 
 let initialized = model.initialize(pokemonsCollectionName, false, url); // false doesnt reset database
