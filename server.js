@@ -3,7 +3,7 @@ const { DatabaseError } = require('./models/DatabaseError');
 const { InvalidInputError } = require('./models/InvalidInputError');
 require('dotenv').config();
 const port = 1339;
-const model = require("./models/userAccountModelMongoDb");
+const model = require("./models/accountModelMongoDb");
 const userAccountCollectionName = "user_account";
 require('dotenv').config();
 
