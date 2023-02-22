@@ -82,7 +82,7 @@ async function addAccount(username, password){
     try {
         // check for valid name and type
         if(validateUtils.isValid2(username,password)){
-            // creates and returns new pokemon object
+            // creates and returns new account object if successful
             if(await !accountCollection.insertOne( { name: username, type: password } ))
                 throw new DatabaseError(`Error while inserting account into db: ${username}, ${password}`);
             
