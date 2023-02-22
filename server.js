@@ -3,8 +3,8 @@ const { DatabaseError } = require('./models/DatabaseError');
 const { InvalidInputError } = require('./models/InvalidInputError');
 require('dotenv').config();
 const port = 1339;
-const model = require("./models/userModelMongoDb");
-const pokemonsCollectionName = "pokemons";
+const model = require("./models/userAccountModelMongoDb");
+const pokemonsCollectionName = "user_account";
 require('dotenv').config();
 
 const url = process.env.URL_PRE + process.env.MONGODB_PWD + process.env.URL_POST;

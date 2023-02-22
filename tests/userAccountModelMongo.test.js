@@ -3,16 +3,16 @@ const { DatabaseError } = require('../models/DatabaseError');
 const { MongoMemoryServer} = require('mongodb-memory-server');
 // TODO: Require Faker JS
 
-const model = require('../models/userModelMongoDb'); // TODO: Change file names to reflect users
+const model = require('../models/userAccountModelMongoDb'); // TODO: Change file names to reflect users
 const utils = require('../models/validateUtils');
 require("dotenv").config();
 jest.setTimeout(100000);
 // TODO: Change DB names to reflect users and not pokemons 
 let client;
 let pokemonsCollection;
-let db = "pokemons_test"; // collection name
+let db = "user_account_test"; // collection name
 
-// TODO: Use fakeJS To generate user data when adding 
+// TODO: Use fakeJS To generate user data when adding or manually make stuff up
 const pokemonData = [
     {name: 'Bulbasaur' , type: 'Grass'},
     {name: 'Charamander' , type: 'Fire'},
