@@ -84,7 +84,7 @@ async function addAccount(username, password){
         // check for valid name and type
         if(validateUtils.isValid2(username,password)){
             // creates and returns new account object if successful
-            if(await !accountCollection.insertOne( { name: username, type: password } ))
+            if(await !accountCollection.insertOne( { username: username, password: password } ))
                 throw new DatabaseError(`Error while inserting account into db: ${username}, ${password}`);
             
             return { username: username, password: password };
