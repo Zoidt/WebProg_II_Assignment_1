@@ -3,7 +3,7 @@ const { DatabaseError } = require('./models/DatabaseError');
 const { InvalidInputError } = require('./models/InvalidInputError');
 require('dotenv').config();
 const port = 1339;
-const model = require("./models/pokemonModelMongoDb");
+const model = require("./models/userModelMongoDb");
 const pokemonsCollectionName = "pokemons";
 require('dotenv').config();
 
