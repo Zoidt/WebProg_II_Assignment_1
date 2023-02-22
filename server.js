@@ -26,12 +26,12 @@ http.createServer(async function (request,response) {
     // Read
     // =================================================================
     // Valid names
-    response.write(await handleReadPokemon("eevee"));
-    response.write(await handleReadPokemon("Pikachu"));
+    response.write(await handleReadAccount("eevee"));
+    response.write(await handleReadAccount("Pikachu"));
 
     // Invalid Names
-    response.write(await handleReadPokemon("DarkLord1"));
-    console.table(await model.getAllPokemon());
+    response.write(await handleReadAccount("DarkLord1"));
+    console.table(await model.getAllAccounts());
     response.end('Hello World!'); 
     
 }).listen(port);
@@ -55,25 +55,25 @@ async function handleAddAccount(username, password){
     } catch (err) {
         // Various Error Messages
         if ( err instanceof InvalidInputError){
-            return `Adding Pokemon Failed: ${err.message}\nFailed Data: "${username}", "${password}" \n==============\n`;
+            return `Adding Account Failed: ${err.message}\nFailed Data: "${username}", "${password}" \n==============\n`;
          }
          else if( err instanceof DatabaseError){
-            return `Adding Pokemon Failed: ${err.message}\n==============\n`;
+            return `Adding Account Failed: ${err.message}\n==============\n`;
          }else{
              return "****** Unexpected error, check logs:  " + err;
          }
     }
 }
 
-async function handleReadPokemon(pokemonName){
+async function handleReadAccount(accountName){
     try {
         // Create pokemon object
-        let pokemon = await model.getSinglePokemon(pokemonName);
+        let account = await model.getSingleAccount(accountName);
         
-        // Check edgecase where pokemon returns null
-        if(pokemon == undefined)
-            return `Read pokemon failed \nPokemon with name: "${pokemonName}", was not found\n==============\n`;
-        else return `Read pokemon successful, \nName: ${pokemon.name} \nType: ${pokemon.type} \n==============\n`;
+        // Check edge case where pokemon returns null
+        if(account == null)
+            return `Read Account failed \nAccount with name: "${accountName}", was not found\n==============\n`;
+        else return `Read Account successful, \nName: ${account.name} \nType: ${account.type} \n==============\n`;
 
     } catch (err) {
         // Various Error Messages
