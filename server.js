@@ -4,12 +4,12 @@ const { InvalidInputError } = require('./models/InvalidInputError');
 require('dotenv').config();
 const port = 1339;
 const model = require("./models/userAccountModelMongoDb");
-const pokemonsCollectionName = "user_account";
+const userAccountCollectionName = "user_account";
 require('dotenv').config();
 
 const url = process.env.URL_PRE + process.env.MONGODB_PWD + process.env.URL_POST;
 
-let initialized = model.initialize(pokemonsCollectionName, false, url); // false doesnt reset database
+let initialized = model.initialize(userAccountCollectionName, false, url); // false doesnt reset database
 
 
 http.createServer(async function (request,response) {
