@@ -20,7 +20,7 @@ http.createServer(async function (request,response) {
     // =================================================================
 
     // TODO: Static normal names/usernames, then fakerJS
-    response.write(await handleAddUser("Pikachu","Electric"))
+    response.write(await handleAddAccount("Pikachu","Electric"))
 
     // =================================================================
     // Read
@@ -42,15 +42,15 @@ http.createServer(async function (request,response) {
  * @param {*} password to add to database
  * @returns String containing success or failure messages
  */
-async function handleAddUser(username, password){
+async function handleAddAccount(username, password){
     try {
         // Create pokemon object
-        let user = await model.addPokemon(username, password);
+        let account = await model.addPokemon(username, password);
         
         // Check edge cases where pokemon returns null
-        if(user == null)
+        if(account == null)
             throw new Error(`ERROR Got null result when adding. Should never happen. \nFailed Data: "${username}", "${password}" \n==============\n`)
-        else return `Creating account successful, \nUsername: ${user.username} \nPassword: ${user.password} \n==============\n`;
+        else return `Creating account successful, \nUsername: ${account.username} \nPassword: ${account.password} \n==============\n`;
 
     } catch (err) {
         // Various Error Messages
