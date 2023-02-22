@@ -12,8 +12,8 @@ let accountCollection;
 // =================================================================
 
 /**
- * Connect up to the online MongoDb Database with the name stord in dbName
- * Use the database with the name stored in dbName and the collection "pokemons"
+ * Connect up to the online MongoDb Database with the name stored in dbName
+ * Use the database with the name stored in dbName and the collection passed in.
  * Will create the "pokemons" collection if it doesn't exist.
  * @param {*} accountCollectionName Name of collection to create or connect to 
  * @param {*} reset If true new collection will be created after deleted old. Otherwise connect to existing collection
@@ -26,7 +26,7 @@ async function initialize(accountCollectionName, reset, url){
         console.log("Connected to MongoDb");
         db = client.db(dbName);
 
-        // Check to see if the pokemons collection exists
+        // Check to see if the collection passed in exists
         collectionCursor = await db.listCollections({name: accountCollectionName});
         collectionArray = await collectionCursor.toArray();
 
