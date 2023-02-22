@@ -106,22 +106,22 @@ async function addAccount(username, password){
 /**
  * Queries database for a single instance of an account with the username
  * that was passed in.
- * @param {*} pokemonName to find in database.
+ * @param {*} username to find in database.
  * @returns Pokemon object or Undefined if pokemon was not found.
  * @throws DatabaseError if fails to read from database.
  */
-async function getSingleAccount(pokemonName){
+async function getSingleAccount(username){
     // Try reading from database
-    let pokemon;
+    let account;
     try {
         // Query database
-        pokemon = await accountCollection.findOne({name: pokemonName});
+        account = await accountCollection.findOne({name: username});
 
     } catch (error) {
-        throw new DatabaseError("Error while reading pokemon data from database: " + error.message)
+        throw new DatabaseError("Error while reading account data from database: " + error.message)
     }
 
-    return pokemon;
+    return account;
 }
 /**
  * Query all pokemon objects inside a MongoDb collection.
