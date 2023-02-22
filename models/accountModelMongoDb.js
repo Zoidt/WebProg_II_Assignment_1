@@ -150,7 +150,7 @@ async function getCollection(){
 module.exports = {
     initialize,
     close,
-    addPokemon: addAccount,
+    addAccount,
     getSinglePokemon,
     getAllPokemon,
     getCollection
