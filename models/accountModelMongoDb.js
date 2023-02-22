@@ -12,9 +12,10 @@ let accountCollection;
 // =================================================================
 
 /**
- * Connect up to the online MongoDb Database with the name stored in dbName
+ * Connect up to the online MongoDb Database with the name stored in dbName.
  * Use the database with the name stored in dbName and the collection passed in.
- * Will create the "pokemons" collection if it doesn't exist.
+ * Creates Database with dbName if it doesn't already exist.
+ * Create the collection with the name passed in  if it doesn't exist.
  * @param {*} accountCollectionName Name of collection to create or connect to 
  * @param {*} reset If true new collection will be created after deleted old. Otherwise connect to existing collection
  * @param {*} url MongoDB login URL 
@@ -76,7 +77,7 @@ async function close() {
  * @param {*} username of account to create.
  * @param {*} password of account to create.
  * @returns pokemon object if successful.
- * @throws InvalidInputError if the type or name of pokemon is invalid.
+ * @throws InvalidInputError if the password or username is invalid.
  */
 async function addAccount(username, password){
     try {
@@ -147,6 +148,17 @@ async function getAllAccounts(){
 async function getCollection(){
     return await accountCollection;
 }
+
+// TODO: update One
+
+// TODO: updateMany
+
+// TODO: replaceOne (optional?)
+
+// TODO: deleteOne
+
+// TODO: deleteMany
+
 module.exports = {
     initialize,
     close,
