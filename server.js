@@ -54,10 +54,10 @@ async function handleAddAccount(username, password){
 
     } catch (err) {
         // Various Error Messages
-        if ( error instanceof InvalidInputError){
+        if ( err instanceof InvalidInputError){
             return `Adding Pokemon Failed: ${err.message}\nFailed Data: "${username}", "${password}" \n==============\n`;
          }
-         else if( error instanceof DatabaseError){
+         else if( err instanceof DatabaseError){
             return `Adding Pokemon Failed: ${err.message}\n==============\n`;
          }else{
              return "****** Unexpected error, check logs:  " + err;
