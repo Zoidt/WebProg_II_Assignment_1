@@ -27,8 +27,8 @@ const { InvalidInputError } = require("./InvalidInputError")
 // TODO: Update variable names and comments
 /**
  * Validate if account data is valid by checking the following: 
- * Check if username is atleast 3 characters long.
- * Check if password is atelast 6 characters long and has a number.
+ * Check if username is at least 3 characters long.
+ * Check if password is at least 6 characters long and has a number.
  * @param {*} username of pokemon name to validate.
  * @param {*} password of pokemon type to validate.
  * @returns True if data is valid.

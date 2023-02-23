@@ -205,6 +205,9 @@ async function updateOnePassword(){
 // TODO: replaceOne (optional?)
 
 // TODO: deleteOne
+async function deleteOneAccount(){
+    
+}
 
 // TODO: deleteMany
 
