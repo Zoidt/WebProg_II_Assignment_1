@@ -43,6 +43,10 @@ http.createServer(async function (request,response) {
 
     //invalid username
     response.write(await handleUpdateUsername("newPikachu", "new12 123"));
+    response.write(await handleUpdateUsername("NewPikachu", "new12 123"));
+    response.write(await handleUpdateUsername("newPikachu", "backToOldPikachu"));
+
+
 
 
 
@@ -124,10 +128,10 @@ async function handleUpdateUsername(username,newUsername){
     } catch (err) {
         // Various Error Messages
          if( err instanceof DatabaseError){
-            return `Update account failed: ${err.message}\n==============\n`;
+            return `Update account failed:\nCannot update username "${username}" with "${newUsername}":${err.message}\n==============\n`;
          }
          else if(err instanceof InvalidInputError){
-            return `Update account failed: ${err.message}\n==============\n`;
+            return `Update account failed:\nCannot update username "${username}" with "${newUsername}":${err.message}\n==============\n`;
          }else{
              return `****** Unexpected error, check logs:\n${err.message}\n==============\n`;
          }

@@ -32,8 +32,8 @@ async function initialize(accountCollectionName, reset, url){
         collectionArray = await collectionCursor.toArray();
 
         if (collectionArray.length == 0){
-            // collation specifying case-insensitive collection
-            const collation = { locale: "en", strength: 1 };
+            // collation specifying case sensitive collection
+            const collation = { locale: "en", strength: 3 };
             // No match was found so create new collection
             await db.createCollection(accountCollectionName, {collation: collation});
         }
@@ -84,9 +84,9 @@ async function addAccount(username, password){
         // check for valid username and password
         if(validateUtils.isValid2(username,password)){
 
-            // check if pokemon already exists by querying database
-            let pokemon = await accountCollection.findOne({username: username});
-            if(pokemon != null)
+            // check if account already exists by querying database
+            let account = await getSingleAccount(username);
+            if(account != null)
                 throw new DatabaseError(`Error while creating account. Username "${username}" already exists.`);
             
             // if account with username does not exist, create one 
@@ -168,7 +168,11 @@ async function getCollection(){
 async function updateOneUsername(currentUsername, newUsername){
 
     try {        
-        // Validate username
+        // Query to see if new username is already taken
+        let account = await getSingleAccount(newUsername);
+        if(account != null)
+            throw new DatabaseError(`\n"${newUsername}" is already taken.`);
+        // Validate new username (Valid state)
         if(validateUtils.isUsernameValid(newUsername)){
             // filter for account
             const filter = {username: currentUsername};
@@ -176,7 +180,8 @@ async function updateOneUsername(currentUsername, newUsername){
             const updateDoc = {
                 $set: {username: newUsername}
             }
-            // Update only the username, where account currentUsername matches in database
+
+            // Update only the username if it exists, where account currentUsername matches in database
             const result = await accountCollection.updateOne(filter, updateDoc);
         
             // check if document was updated or not, return accordingly
@@ -206,7 +211,12 @@ async function updateOnePassword(){
 
 // TODO: deleteOne
 async function deleteOneAccount(){
-    
+
+    try {
+        
+    } catch (error) {
+        
+    }
 }
 
 // TODO: deleteMany
