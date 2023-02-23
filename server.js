@@ -107,7 +107,7 @@ async function handleUpdateUsername(username,newUsername){
         // Create pokemon object
         let account = await model.updateOneUsername(username,newUsername);
         
-        // Check edge case where pokemon returns null
+        // Success or failure messages
         if(!account)
             return `Update account failed \nAccount with name: "${username}", was not found\n==============\n`;
         else return `Update account successful, \nOld Username: ${username} \nNew Username: ${newUsername} \n==============\n`;
@@ -116,6 +116,9 @@ async function handleUpdateUsername(username,newUsername){
         // Various Error Messages
          if( err instanceof DatabaseError){
             return `Update account failed: ${err.message}\n==============\n`;
+         }
+         else if(err instanceof InvalidInputError){
+            return `Update account failed:\n${err.message}\n==============\n`;
          }else{
              return `****** Unexpected error, check logs:\n${err.message}\n==============\n`;
          }

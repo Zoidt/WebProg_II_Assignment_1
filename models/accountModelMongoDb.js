@@ -169,26 +169,27 @@ async function updateOneUsername(currentUsername, newUsername){
 
     try {        
         // Validate username
+        if(validateUtils.isUsernameValid(newUsername)){
+            // filter for account
+            const filter = {username: currentUsername};
+            // information we want to change
+            const updateDoc = {
+                $set: {username: newUsername}
+            }
+            // Update only the username, where account currentUsername matches in database
+            const result = await accountCollection.updateOne(filter, updateDoc);
         
-        // filter for account
-        const filter = {username: currentUsername};
-        // information we want to change
-        const updateDoc = {
-            $set: {username: newUsername}
+            // check if document was updated or not, return accordingly
+            if(result.modifiedCount > 0)
+                return true;
+            return false;
         }
-        // Update only the username, where account currentUsername matches in database
-        const result = await accountCollection.updateOne(filter, updateDoc);
-        
-        // check if document was updated or not, return accordingly
-        if(result.modifiedCount > 0)
-            return true;
-        return false;
 
     } catch (error) {
         if(error instanceof DatabaseError)
             console.log("Error while updating account data to database:" + error.message);
         if(error instanceof InvalidInputError)
-            console.log("Error while updating account data from database" + error.message);
+            console.log("Error with input when updating account data: " + error.message);
         else 
             console.log("Unexpected error: " + error.message);
 
