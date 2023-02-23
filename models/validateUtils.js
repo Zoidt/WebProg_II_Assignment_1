@@ -26,27 +26,29 @@ const { InvalidInputError } = require("./InvalidInputError")
 
 // TODO: Update variable names and comments
 /**
- * Validate if pokemon data is valid by checking.
- * Check if name contains only letters and is not empty.
- * Check if type is within accepted types.
- * @param {*} name of pokemon name to validate.
- * @param {*} type of pokemon type to validate.
+ * Validate if account data is valid by checking the following: 
+ * Check if username is atleast 3 characters long
+ * Check if password is atelast 6 characters long and has a number
+ * @param {*} username of pokemon name to validate.
+ * @param {*} password of pokemon type to validate.
  * @returns True if data is valid
  * @throws InvalidInputError if pokemon Name or Type is invalid.
  */
- function isValid2(name, type) {
+ function isValid2(username, password) {
     // TODO: Validate if user is atleast 3 characters long 
     // check if name contains only letters
-    if(!validator.isAlpha(name)){
-        throw new InvalidInputError("\nINVALID NAME: Name must contain only letters. It cannot be empty or contain numbers.\nName passed in: " + name);
+    if(!validator.isAlpha(username)){
+        // TODO: Update error message
+        throw new InvalidInputError("\nINVALID NAME: Name must contain only letters. It cannot be empty or contain numbers.\nName passed in: " + username);
     }
     // TODO: Check if password is minimum length (6) and has 1 number
     // name valid, check type
-    if(type == "Normal" || type == "Grass" || type =="Fire" || type == "Water" || type == "Electric" || type == "Psychic") 
+    if(password == "Normal" || password == "Grass" || password =="Fire" || password == "Water" || password == "Electric" || password == "Psychic") 
         return true;
     
-    let acceptedTypes = "\nAccepted types: Normal, Grass, Fire, Water, Electric, Psychic"
-    throw new InvalidInputError("\nINVALID TYPE. Type must be within accepted types.\nType passed in: " + type + acceptedTypes) ;
+    let acceptedTypes = "\nAccepted types: Normal, Grass, Fire, Water, Electric, Psychic";
+    // TODO: Update error message
+    throw new InvalidInputError("\nINVALID TYPE. Type must be within accepted types.\nType passed in: " + password + acceptedTypes) ;
 }
 
 module.exports ={

@@ -159,16 +159,17 @@ async function getCollection(){
 
 // TODO: updateOne
 /**
- * Updates account in database with new username that is passed in.
- * 
+ * Updates account username in database with new username that is passed in.
  * @param {*} currentUsername of account we want to update.
  * @param {*} newUsername newUsername of account we want to update.
  * @returns booleans, true if update was successful, false otherwise.
+ * @throws InvalidInputError if username is invalid.
  */
 async function updateOneUsername(currentUsername, newUsername){
 
     try {        
-        // Check if username exists already?
+        // Validate username
+        
         // filter for account
         const filter = {username: currentUsername};
         // information we want to change
