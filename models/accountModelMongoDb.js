@@ -176,9 +176,12 @@ async function updateOneUsername(currentUsername, newUsername){
             $set: {username: newUsername}
         }
         // Update only the username, where account currentUsername matches in database
-        const result = await accountCollection.update(filter, updateDoc);
+        const result = await accountCollection.updateOne(filter, updateDoc);
         
-        return result;
+        // check if document was updated or not, return accordingly
+        if(result.modifiedCount > 0)
+            return true;
+        return false;
 
     } catch (error) {
         if(error instanceof DatabaseError)

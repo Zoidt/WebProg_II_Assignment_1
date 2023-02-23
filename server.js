@@ -37,9 +37,9 @@ http.createServer(async function (request,response) {
     // Update
     // =================================================================
     // valid username
-    response.write(await handleUpdateAccount("Pikachu","newPikachu"));
-    response.write(await handleUpdateAccount("Darklord","newDarkLord"));
-    response.write(await handleUpdateAccount("Pikachu","newDarkLord"));
+    response.write(await handleUpdateUsername("Pikachu","newPikachu"));
+    response.write(await handleUpdateUsername("Darklord","newDarkLord"));
+    response.write(await handleUpdateUsername("Pikachu","newDarkLord"));
 
 
 
@@ -108,9 +108,9 @@ async function handleUpdateUsername(username,newUsername){
         let account = await model.updateOneUsername(username,newUsername);
         
         // Check edge case where pokemon returns null
-        if(account == null)
+        if(!account)
             return `Update account failed \nAccount with name: "${username}", was not found\n==============\n`;
-        else return `Update account successful, \nOld Username: ${account.username} \nPassword: ${account.password} \n==============\n`;
+        else return `Update account successful, \nOld Username: ${username} \nNew Username: ${newUsername} \n==============\n`;
 
     } catch (err) {
         // Various Error Messages
