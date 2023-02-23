@@ -41,6 +41,9 @@ http.createServer(async function (request,response) {
     response.write(await handleUpdateUsername("Darklord","newDarkLord"));
     response.write(await handleUpdateUsername("Pikachu","newDarkLord"));
 
+    //invalid username
+    response.write(await handleUpdateUsername("newPikachu", "new12 123"));
+
 
 
 
@@ -102,6 +105,12 @@ async function handleReadAccount(username){
     }
 }
 
+/**
+ * Helper function for updating account username inside a database.
+ * @param {*} username original username of the account you want to update.
+ * @param {*} newUsername new username of the account you want to update.
+ * @returns success or error message.
+ */
 async function handleUpdateUsername(username,newUsername){
     try {
         // Create pokemon object
@@ -118,7 +127,7 @@ async function handleUpdateUsername(username,newUsername){
             return `Update account failed: ${err.message}\n==============\n`;
          }
          else if(err instanceof InvalidInputError){
-            return `Update account failed:\n${err.message}\n==============\n`;
+            return `Update account failed: ${err.message}\n==============\n`;
          }else{
              return `****** Unexpected error, check logs:\n${err.message}\n==============\n`;
          }

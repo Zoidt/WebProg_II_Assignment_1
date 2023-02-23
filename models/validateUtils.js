@@ -38,7 +38,6 @@ const { InvalidInputError } = require("./InvalidInputError")
     // TODO: Validate if user is atleast 3 characters long 
     // check if name contains only letters and numbers
     if(!validator.isAlphanumeric(username)){
-        // TODO: Update error message
         throw new InvalidInputError("\nINVALID NAME: Name must contain only letters and numbers. It cannot be empty or contain spaces\nName passed in: " + username);
     }
     // TODO: Check if password is minimum length (6) and has 1 number
@@ -61,7 +60,8 @@ function isUsernameValid(username) {
 
     if(!validator.isAlphanumeric(username)){
         // TODO: Update error message
-        throw new InvalidInputError("\nINVALID NAME: Name must contain only letters and numbers. It cannot be empty or contain spaces\nName passed in: " + username);
+        throw new InvalidInputError("\nINVALID NAME: Name must contain only letters and numbers." + 
+        " It cannot be empty or contain spaces\nName passed in: " + username);
     }
     return true;
 }
