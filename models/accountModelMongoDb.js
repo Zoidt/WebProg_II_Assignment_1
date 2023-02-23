@@ -81,18 +81,25 @@ async function close() {
  */
 async function addAccount(username, password){
     try {
-        // TODO: cannot add two of same pokemon
-            // check if pokemon already exists by querying database
-        // check for valid name and type
+        // TODO: cannot add two accounts with same username
+        // check for valid username and password
         if(validateUtils.isValid2(username,password)){
+
+            // check if pokemon already exists by querying database
+            let pokemon = await accountCollection.findOne({username: username});
+            if(pokemon != null)
+                throw new DatabaseError(`Error while creating account. Username "${username}" already exists.`);
+            
+            // if account with username does not exist, create one 
             // creates and returns new account object if successful
             if(await !accountCollection.insertOne( { username: username, password: password } ))
                 throw new DatabaseError(`Error while inserting account into db: ${username}, ${password}`);
             
+            // Return account object
             return { username: username, password: password };
         }
         
-    } catch (err) {
+    } catch (err) { 
         if(err instanceof InvalidInputError){
             console.log("Input Error while adding account: " + err.message);
         }
@@ -152,21 +159,28 @@ async function getCollection(){
 }
 
 // TODO: updateOne
+/**
+ * Updates account in database with new username that is passed in.
+ * 
+ * @param {*} currentUsername of account we want to update.
+ * @param {*} newUsername newUsername of account we want to update.
+ * @returns booleans, true if update was successful, false otherwise.
+ */
 async function updateOneUsername(currentUsername, newUsername){
 
-    try {
-        // check if username exists
-        const account = await getSingleAccount(currentUsername);
-        
+    try {        
+        // Check if username exists already?
         // filter for account
         const filter = {username: currentUsername};
         // information we want to change
         const updateDoc = {
             $set: {username: newUsername}
         }
-
-
+        // Update only the username, where account currentUsername matches in database
+        const result = await accountCollection.update(filter, updateDoc);
         
+        return result;
+
     } catch (error) {
         if(error instanceof DatabaseError)
             console.log("Error while updating account data to database:" + error.message);
@@ -174,6 +188,7 @@ async function updateOneUsername(currentUsername, newUsername){
             console.log("Error while updating account data from database" + error.message);
         else 
             console.log("Unexpected error: " + error.message);
+
         throw error;
     }
 }

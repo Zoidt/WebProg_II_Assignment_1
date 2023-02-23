@@ -65,6 +65,11 @@ async function handleAddAccount(username, password){
     }
 }
 
+/**
+ * Helper function for reading account data from a mongoDB database.
+ * @param {*} accountName we want to find in database.
+ * @returns string with success or error message.
+ */
 async function handleReadAccount(accountName){
     try {
         // Create pokemon object
