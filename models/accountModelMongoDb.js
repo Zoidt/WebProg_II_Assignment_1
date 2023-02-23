@@ -210,5 +210,6 @@ module.exports = {
     addAccount,
     getSingleAccount,
     getAllAccounts,
-    getCollection
+    getCollection,
+    updateOneUsername
 }

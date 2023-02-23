@@ -25,13 +25,25 @@ http.createServer(async function (request,response) {
     // =================================================================
     // Read
     // =================================================================
-    // Valid names
+    // Valid usernames
     response.write(await handleReadAccount("eevee"));
     response.write(await handleReadAccount("Pikachu"));
 
-    // Invalid Names
+    // Invalid usernames
     response.write(await handleReadAccount("DarkLord1"));
-    console.table(await model.getAllAccounts());
+    console.table(await model.getAllAccounts()); // internal 
+
+    // =================================================================
+    // Update
+    // =================================================================
+    // valid username
+    response.write(await handleUpdateAccount("Pikachu","newPikachu"));
+    response.write(await handleUpdateAccount("Darklord","newDarkLord"));
+    response.write(await handleUpdateAccount("Pikachu","newDarkLord"));
+
+
+
+
     response.end('Hello World!'); 
     
 }).listen(port);
@@ -67,23 +79,43 @@ async function handleAddAccount(username, password){
 
 /**
  * Helper function for reading account data from a mongoDB database.
- * @param {*} accountName we want to find in database.
+ * @param {*} username we want to find in database.
  * @returns string with success or error message.
  */
-async function handleReadAccount(accountName){
+async function handleReadAccount(username){
     try {
         // Create pokemon object
-        let account = await model.getSingleAccount(accountName);
+        let account = await model.getSingleAccount(username);
         
         // Check edge case where pokemon returns null
         if(account == null)
-            return `Read Account failed \nAccount with name: "${accountName}", was not found\n==============\n`;
+            return `Read Account failed \nAccount with name: "${username}", was not found\n==============\n`;
         else return `Read Account successful, \nUsername: ${account.username} \nPassword: ${account.password} \n==============\n`;
 
     } catch (err) {
         // Various Error Messages
          if( err instanceof DatabaseError){
             return `Reading Account Failed: ${err.message}\n==============\n`;
+         }else{
+             return `****** Unexpected error, check logs:\n${err.message}\n==============\n`;
+         }
+    }
+}
+
+async function handleUpdateUsername(username,newUsername){
+    try {
+        // Create pokemon object
+        let account = await model.updateOneUsername(username,newUsername);
+        
+        // Check edge case where pokemon returns null
+        if(account == null)
+            return `Update account failed \nAccount with name: "${username}", was not found\n==============\n`;
+        else return `Update account successful, \nOld Username: ${account.username} \nPassword: ${account.password} \n==============\n`;
+
+    } catch (err) {
+        // Various Error Messages
+         if( err instanceof DatabaseError){
+            return `Update account failed: ${err.message}\n==============\n`;
          }else{
              return `****** Unexpected error, check logs:\n${err.message}\n==============\n`;
          }
