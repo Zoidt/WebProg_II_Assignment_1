@@ -27,19 +27,19 @@ const { InvalidInputError } = require("./InvalidInputError")
 // TODO: Update variable names and comments
 /**
  * Validate if account data is valid by checking the following: 
- * Check if username is atleast 3 characters long
- * Check if password is atelast 6 characters long and has a number
+ * Check if username is atleast 3 characters long.
+ * Check if password is atelast 6 characters long and has a number.
  * @param {*} username of pokemon name to validate.
  * @param {*} password of pokemon type to validate.
- * @returns True if data is valid
+ * @returns True if data is valid.
  * @throws InvalidInputError if pokemon Name or Type is invalid.
  */
  function isValid2(username, password) {
     // TODO: Validate if user is atleast 3 characters long 
-    // check if name contains only letters
-    if(!validator.isAlpha(username)){
+    // check if name contains only letters and numbers
+    if(!validator.isAlphanumeric(username)){
         // TODO: Update error message
-        throw new InvalidInputError("\nINVALID NAME: Name must contain only letters. It cannot be empty or contain numbers.\nName passed in: " + username);
+        throw new InvalidInputError("\nINVALID NAME: Name must contain only letters and numbers. It cannot be empty or contain spaces\nName passed in: " + username);
     }
     // TODO: Check if password is minimum length (6) and has 1 number
     // name valid, check type
@@ -51,6 +51,22 @@ const { InvalidInputError } = require("./InvalidInputError")
     throw new InvalidInputError("\nINVALID TYPE. Type must be within accepted types.\nType passed in: " + password + acceptedTypes) ;
 }
 
+/**
+ * Check if username has only letters and numbers.
+ * @param {*} username to validate.
+ * @returns true if username is valid.
+ * @throws InvalidInputError if username has spaces, is empty or contains illegal characters.
+ */
+function isUsernameValid(username) {
+
+    if(!validator.isAlphanumeric(username)){
+        // TODO: Update error message
+        throw new InvalidInputError("\nINVALID NAME: Name must contain only letters and numbers. It cannot be empty or contain spaces\nName passed in: " + username);
+    }
+    return true;
+}
+
 module.exports ={
-    isValid2
+    isValid2,
+    isUsernameValid
 }
