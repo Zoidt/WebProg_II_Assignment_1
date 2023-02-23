@@ -81,7 +81,6 @@ async function close() {
  */
 async function addAccount(username, password){
     try {
-        // TODO: cannot add two accounts with same username
         // check for valid username and password
         if(validateUtils.isValid2(username,password)){
 
