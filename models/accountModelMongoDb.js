@@ -116,7 +116,7 @@ async function addAccount(username, password){
  * Queries database for a single instance of an account with the username
  * that was passed in.
  * @param {*} username to find in database.
- * @returns Pokemon object or Undefined if pokemon was not found.
+ * @returns Account object or Undefined if pokemon was not found.
  * @throws DatabaseError if fails to read from database.
  */
 async function getSingleAccount(username){
@@ -160,10 +160,13 @@ async function getCollection(){
 // TODO: updateOne
 /**
  * Updates account username in database with new username that is passed in.
+ * Checks if current username is an existing account.
+ * Checks if newUsername is valid and is an existing account.
  * @param {*} currentUsername of account we want to update.
  * @param {*} newUsername newUsername of account we want to update.
  * @returns booleans, true if update was successful, false otherwise.
  * @throws InvalidInputError if username is invalid.
+ * @throws DatabaseError if error while reading from database or when an account with new username already exists.
  */
 async function updateOneUsername(currentUsername, newUsername){
 
@@ -213,7 +216,9 @@ async function updateOnePassword(){
 async function deleteOneAccount(){
 
     try {
-        
+        // Query if account exists
+
+        // Delete 
     } catch (error) {
         
     }
