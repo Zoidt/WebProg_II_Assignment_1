@@ -97,8 +97,6 @@ test("Can add pokemon to DB", async () => {
  
 });
 
-
-
 test("Cannot add pokemon with an empty name", async () => {
     const { name, type } = genereatePokemonData();
     const emptyName = "";
@@ -106,15 +104,6 @@ test("Cannot add pokemon with an empty name", async () => {
     // Check Pokemon TODO: Update expect
     await expect(()=> model.createPokemon(emptyName,type)).rejects.toThrow(InvalidInputError);
 });
-
-// Read one
-
-// Read many 
-
-// Update
-
-// Delete
-
 
 
 test("Cannot add pokemon with a number in name.", async () => {
@@ -133,8 +122,6 @@ test("Cannot add pokemon with invalid type", async () => {
     await expect(()=> model.createPokemon(name,invalidType)).rejects.toThrow(InvalidInputError);
 });
 
-// Adding multiplePokemon
-// ----------------------------------------------------------------
 
 test.only("Can add two pokemon with valid inputs without overwriting", async () => {
     
@@ -161,3 +148,11 @@ test.only("Can add two pokemon with valid inputs without overwriting", async () 
    await expect(database[1].name.toLowerCase() == pokemon2.name.toLowerCase()).toBe(true);
    await expect(database[1].type.toLowerCase() == pokemon2.type.toLowerCase()).toBe(true);
 });
+// Read one
+
+// Read many 
+
+// Update
+
+// Delete
+
