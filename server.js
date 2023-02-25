@@ -4,12 +4,12 @@ const { InvalidInputError } = require('./models/InvalidInputError');
 require('dotenv').config();
 const port = 1339;
 const model = require("./models/accountModelMongoDb");
-const userAccountCollectionName = "user_account";
+const userAccountCollectionName = "user_account_test";
 require('dotenv').config();
 
 const url = process.env.URL_PRE + process.env.MONGODB_PWD + process.env.URL_POST;
 
-let initialized = model.initialize(userAccountCollectionName, false, url); // false doesnt reset database
+let initialized = model.initialize(userAccountCollectionName, true, url); // false doesnt reset database
 
 
 http.createServer(async function (request,response) {
@@ -20,7 +20,9 @@ http.createServer(async function (request,response) {
     // =================================================================
 
     // TODO: Static normal names/usernames, then fakerJS
-    response.write(await handleAddAccount("Pikachu","Electric"))
+    response.write(await handleAddAccount("Pikachu","Electric"));
+    response.write(await handleAddAccount("Pikachu","Electric"));
+    response.write(await handleAddAccount("Pikachu","Electric"));
 
     // =================================================================
     // Read
@@ -37,14 +39,14 @@ http.createServer(async function (request,response) {
     // Update
     // =================================================================
     // valid username
-    response.write(await handleUpdateUsername("Pikachu","newPikachu"));
-    response.write(await handleUpdateUsername("Darklord","newDarkLord"));
-    response.write(await handleUpdateUsername("Pikachu","newDarkLord"));
+    //response.write(await handleUpdateUsername("Pikachu","newPikachu"));
+   // response.write(await handleUpdateUsername("Darklord","newDarkLord"));
+    //response.write(await handleUpdateUsername("Pikachu","newDarkLord"));
 
     //invalid username
-    response.write(await handleUpdateUsername("newPikachu", "new12 123"));
-    response.write(await handleUpdateUsername("NewPikachu", "new12 123"));
-    response.write(await handleUpdateUsername("newPikachu", "backToOldPikachu"));
+   // response.write(await handleUpdateUsername("newPikachu", "new12 123"));
+    //response.write(await handleUpdateUsername("NewPikachu", "new12 123"));
+   // response.write(await handleUpdateUsername("newPikachu", "backToOldPikachu"));
 
 
 

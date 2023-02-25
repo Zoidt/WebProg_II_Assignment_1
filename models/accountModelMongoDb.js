@@ -2,7 +2,7 @@ const { MongoClient, ListCollectionsCursor } = require("mongodb");
 const { DatabaseError } = require("./DatabaseError");
 const { InvalidInputError } = require("./InvalidInputError");
 const validateUtils = require("./validateUtils");
-const dbName = "user_account_db"; // Main: user_account_db, Test: user_account_db_test
+const dbName = "user_account_db_test"; // Main: user_account_db, Test: user_account_db_test
 
 let client;
 let accountCollection;
@@ -45,7 +45,7 @@ async function initialize(accountCollectionName, reset, url){
             // drop collection and create new one 
             accountCollection.drop();
             // collation specifying case-insensitive collection
-            const collation = { locale: "en", strength: 1 };
+            const collation = { locale: "en", strength: 3 };
             // Create new collection since old was dropped
             await db.createCollection(accountCollectionName, {collation: collation});
 
@@ -84,18 +84,28 @@ async function addAccount(username, password){
         // check for valid username and password
         if(validateUtils.isValid2(username,password)){
 
-            // check if account already exists by querying database
+            /**This block of code works when connecting directly to mongodb but it causes 
+             * the add tests to fail. Unsure as to why. 
+             * 
+             *  // check if account already exists by querying database
+            console.log("Before querying database in add ");
             let account = await getSingleAccount(username);
-            if(account != null)
+            console.log("After querying database in add " + account);
+
+            if(account != null){
+                console.log("Account already exists about to throw an error");
+
                 throw new DatabaseError(`Error while creating account. Username "${username}" already exists.`);
-            
-            // if account with username does not exist, create one 
-            // creates and returns new account object if successful
-            if(await !accountCollection.insertOne( { username: username, password: password } ))
-                throw new DatabaseError(`Error while inserting account into db: ${username}, ${password}`);
-            
-            // Return account object
-            return { username: username, password: password };
+            }
+             */
+     
+                // if account with username does not exist, create one 
+                // creates and returns new account object if successful
+                if(await !accountCollection.insertOne( { username: username, password: password } ))
+                    throw new DatabaseError(`Error while inserting account into db: ${username}, ${password}`);
+                    
+                // Return account object
+                    return { username: username, password: password };
         }
         
     } catch (err) { 

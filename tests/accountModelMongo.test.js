@@ -78,14 +78,14 @@ afterEach(async () => {
 // ----------------------------------------------------------------
 
 // Add test 
-test("Can add pokemon to DB", async () => {
-    const { username, password: password } = generatePokemonData();
-    await model.addAccount(username,password) // add pokemon to database 
-    
+test.only("Can add pokemon to DB", async () => {
+    const { username, password } = generatePokemonData();
+    await model.addAccount(username,password) // add pokemon to database  
+
     // Query database
     const cursor = await model.getCollection();
-    let results = await cursor.find().toArray();// Convert query to array
-   
+    let results = await cursor.find({username: username}).toArray();// Convert query to array
+    console.log("Inside of test, results values is: " + results[0].username)
     // Check Array 
     expect(Array.isArray(results)).toBe(true);
     expect(results.length).toBe(1);
