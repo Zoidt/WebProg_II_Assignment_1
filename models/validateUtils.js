@@ -42,12 +42,11 @@ const { InvalidInputError } = require("./InvalidInputError")
     }
     // TODO: Check if password is minimum length (6) and has 1 number
     // name valid, check type
-    if(password == "Normal" || password == "Grass" || password =="Fire" || password == "Water" || password == "Electric" || password == "Psychic") 
+    if(!validator.isAlphanumeric(password)) 
         return true;
     
-    let acceptedTypes = "\nAccepted types: Normal, Grass, Fire, Water, Electric, Psychic";
     // TODO: Update error message
-    throw new InvalidInputError("\nINVALID TYPE. Type must be within accepted types.\nType passed in: " + password + acceptedTypes) ;
+    throw new InvalidInputError("\nINVALID Password. Password must be alhpabenurmical.\nPassword passed in: " + password) ;
 }
 
 /**

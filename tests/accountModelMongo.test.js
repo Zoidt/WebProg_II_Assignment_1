@@ -101,8 +101,8 @@ test("Can add account to DB", async () => {
 test("Cannot add account with an empty username", async () => {
     const { username, password } = generatePokemonData();
     const emptyName = "";
-
-    // Check Pokemon TODO: Update expect
+    
+    // expect InvalidInputError exception to be thrown
     await expect(()=> model.addAccount(emptyName,password)).rejects.toThrow(InvalidInputError);
 });
 
@@ -111,7 +111,7 @@ test("Cannot add account with a number non alphabet/number name", async () => {
     const { username, password } = generatePokemonData();
     const nameWithNumber = "Pikachu1-_";
 
-    // Check PokemonTODO: Update expect
+    // expect InvalidInputError exception to be thrown
     await expect(()=> model.addAccount(nameWithNumber,password)).rejects.toThrow(InvalidInputError);
 });
 
@@ -119,7 +119,7 @@ test("Cannot add account with invalid password", async () => {
     const { username, password } = generatePokemonData();
     const  invalidType = "Pikachu1";
 
-    // Check PokemonTODO: Update expect
+    // expect InvalidInputError exception to be thrown
     await expect(()=> model.addAccount(username,invalidType)).rejects.toThrow(InvalidInputError);
 });
 
@@ -128,12 +128,37 @@ test("Cannot add account with invalid password", async () => {
 // -------------
 
 // Read one
-test("Cannot read account that doesn't exist", async () => {
+// while we technically didnt need this one because the add queries, good to check
+test("Can read existing account ", async () => {
     const { username, password } = generatePokemonData();
-    const  invalidType = "Pikachu1";
+    await model.addAccount(username,password) // add account to database  
+    
+    // Query database
+    let account =  await model.getSingleAccount(username);
+    const cursor = await model.getCollection();
+    let results = await cursor.find({username: username}).toArray();// Convert query to array
+    
+    // Check details from getSingleAccount
+    expect(account.username.toLowerCase() == username.toLowerCase()).toBe(true);
+    expect(account.password.toLowerCase() == password.toLowerCase()).toBe(true);
+
+    // Check account again but directly from database
+    expect(results[0].username.toLowerCase() == username.toLowerCase()).toBe(true);
+    expect(results[0].password.toLowerCase() == password.toLowerCase()).toBe(true);
+ 
+});
+
+test("Cannot read account that doesn't exist (Valid name)", async () => {
+
+    // Add some accounts to the database
+    const { username, password } = generatePokemonData();
+    // TODO: use fakerJS for fake usernames and passwords
+    await model.addAccount(username,password) // add account to database  
+    await model.addAccount("Zaid","123467GoodPassword") 
+    await model.addAccount("Ahmed","123ShorterPassword")  
 
     // Check PokemonTODO: Update expect
-    await expect(()=> model.addAccount(username,invalidType)).rejects.toThrow(InvalidInputError);
+    await expect(()=> model.getSingleAccount(username)).rejects.toThrow(InvalidInputError);
 });
 
 // Read many 
