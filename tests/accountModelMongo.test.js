@@ -70,9 +70,13 @@ afterEach(async () => {
     await model.close();
 });
 
-
+// =================================================================
 // Test Units
+// =================================================================
 
+
+// Create Pokemon
+// ----------------------------------------------------------------
 
 // Add test 
 test("Can add pokemon to DB", async () => {
@@ -93,6 +97,16 @@ test("Can add pokemon to DB", async () => {
  
 });
 
+
+
+test("Cannot add pokemon with an empty name", async () => {
+    const { name, type } = genereatePokemonData();
+    const emptyName = "";
+
+    // Check Pokemon TODO: Update expect
+    await expect(()=> model.createPokemon(emptyName,type)).rejects.toThrow(InvalidInputError);
+});
+
 // Read one
 
 // Read many 
@@ -100,3 +114,50 @@ test("Can add pokemon to DB", async () => {
 // Update
 
 // Delete
+
+
+
+test("Cannot add pokemon with a number in name.", async () => {
+    const { name, type } = genereatePokemonData();
+    const nameWithNumber = "Pikachu1";
+
+    // Check PokemonTODO: Update expect
+    await expect(()=> model.createPokemon(nameWithNumber,type)).rejects.toThrow(InvalidInputError);
+});
+
+test("Cannot add pokemon with invalid type", async () => {
+    const { name, type } = genereatePokemonData();
+    const  invalidType = "Pikachu1";
+
+    // Check PokemonTODO: Update expect
+    await expect(()=> model.createPokemon(name,invalidType)).rejects.toThrow(InvalidInputError);
+});
+
+// Adding multiplePokemon
+// ----------------------------------------------------------------
+
+test.only("Can add two pokemon with valid inputs without overwriting", async () => {
+    
+    const { name, type } = genereatePokemonData();
+    console.log("Inside test: Pokemon Info: " +  name +  type);
+
+    //const { secondName, secondType } = genereatePokemonData();
+    //console.log("Inside test: Pokemon Info: " +  secondName +  secondType);
+
+    let pokemon = await model.createPokemon(name,type);
+    let pokemon2 = await model.createPokemon(name,type);
+
+    let database = await utils.readFromJsonFile(dbFile);
+
+    // Check Array 
+    expect(Array.isArray(database)).toBe(true);
+    expect(database.length).toBe(2);
+
+    // Check First Pokemon Object
+   await expect(database[0].name.toLowerCase() == pokemon.name.toLowerCase()).toBe(true);
+   await expect(database[0].type.toLowerCase() == pokemon.type.toLowerCase()).toBe(true);
+
+   // Check second pokemon object
+   await expect(database[1].name.toLowerCase() == pokemon2.name.toLowerCase()).toBe(true);
+   await expect(database[1].type.toLowerCase() == pokemon2.type.toLowerCase()).toBe(true);
+});
