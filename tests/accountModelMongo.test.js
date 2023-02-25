@@ -3,34 +3,33 @@ const { DatabaseError } = require('../models/DatabaseError');
 const { MongoMemoryServer} = require('mongodb-memory-server');
 // TODO: Require Faker JS
 
-const model = require('../models/accountModelMongoDb'); // TODO: Change file names to reflect users
+const model = require('../models/accountModelMongoDb');
 const utils = require('../models/validateUtils');
 require("dotenv").config();
 jest.setTimeout(100000);
-// TODO: Change DB names to reflect users and not pokemons 
 let client;
 let pokemonsCollection;
 let db = "user_account_test"; // collection name
 
 // TODO: Use fakeJS To generate user data when adding or manually make stuff up
 const pokemonData = [
-    {name: 'Bulbasaur' , type: 'Grass'},
-    {name: 'Charamander' , type: 'Fire'},
-    {name: 'Squirtle' , type: 'Water'},
-    {name: 'Pikachu' , type: 'Electric'},
-    {name: 'Pidgeotto' , type: 'Psychic'},
-    {name: 'Chancey' , type: 'Normal'},
-    {name: 'Raichu' , type: 'Electric'},
-    {name: 'Venausaur' , type: 'Grass'},
-    {name: 'Ivysaur' , type: 'Grass'},
-    {name: 'Wartortle' , type: 'Water'},
-    {name: 'Blastoise' , type: 'Water'},
-    {name: 'Charmeleon' , type: 'Fire'},
-    {name: 'Charizard' , type: 'Fire'},
-    {name: 'Greninja' , type: 'Water'},
-    {name: 'Darkrai' , type: 'Normal'},
-    {name: 'Alakazam' , type: 'Psychic'},
-    {name: 'Snorlax' , type: 'Normal'}
+    {username: 'Bulbasaur' , password: 'Grass'},
+    {username: 'Charamander' , password: 'Fire'},
+    {username: 'Squirtle' , password: 'Water'},
+    {username: 'Pikachu' , password: 'Electric'},
+    {username: 'Pidgeotto' , password: 'Psychic'},
+    {username: 'Chancey' , password: 'Normal'},
+    {username: 'Raichu' , password: 'Electric'},
+    {username: 'Venausaur' , password: 'Grass'},
+    {username:'Ivysaur' , password: 'Grass'},
+    {username:'Wartortle' , password: 'Water'},
+    {username: 'Blastoise' , password: 'Water'},
+    {username: 'Charmeleon' , password: 'Fire'},
+    {username: 'Charizard' , password: 'Fire'},
+    {username: 'Greninja' , password: 'Water'},
+    {username: 'Darkrai' , password: 'Normal'},
+    {username: 'Alakazam' , password: 'Psychic'},
+    {username: 'Snorlax' , password: 'Normal'}
 ]
 
 /** Since a  pokemon can only be added to the DB once, we have to splice from the array. */
@@ -80,8 +79,8 @@ afterEach(async () => {
 
 // Add test 
 test("Can add pokemon to DB", async () => {
-    const { name, type } = generatePokemonData();
-    await model.addAccount(name,type) // add pokemon to database 
+    const { username, password: password } = generatePokemonData();
+    await model.addAccount(username,password) // add pokemon to database 
     
     // Query database
     const cursor = await model.getCollection();
@@ -92,30 +91,30 @@ test("Can add pokemon to DB", async () => {
     expect(results.length).toBe(1);
 
     // Check Pokemon Object from Database 
-    expect(results[0].name.toLowerCase() == name.toLowerCase()).toBe(true);
-    expect(results[0].type.toLowerCase() == type.toLowerCase()).toBe(true);
+    expect(results[0].username.toLowerCase() == username.toLowerCase()).toBe(true);
+    expect(results[0].password.toLowerCase() == password.toLowerCase()).toBe(true);
  
 });
 
 test("Cannot add pokemon with an empty name", async () => {
-    const { name, type } = genereatePokemonData();
+    const { name, password } = genereatePokemonData();
     const emptyName = "";
 
     // Check Pokemon TODO: Update expect
-    await expect(()=> model.createPokemon(emptyName,type)).rejects.toThrow(InvalidInputError);
+    await expect(()=> model.createPokemon(emptyName,password)).rejects.toThrow(InvalidInputError);
 });
 
 
 test("Cannot add pokemon with a number in name.", async () => {
-    const { name, type } = genereatePokemonData();
+    const { name, password } = genereatePokemonData();
     const nameWithNumber = "Pikachu1";
 
     // Check PokemonTODO: Update expect
-    await expect(()=> model.createPokemon(nameWithNumber,type)).rejects.toThrow(InvalidInputError);
+    await expect(()=> model.createPokemon(nameWithNumber,password)).rejects.toThrow(InvalidInputError);
 });
 
-test("Cannot add pokemon with invalid type", async () => {
-    const { name, type } = genereatePokemonData();
+test("Cannot add pokemon with invalid password", async () => {
+    const { name, password } = genereatePokemonData();
     const  invalidType = "Pikachu1";
 
     // Check PokemonTODO: Update expect
@@ -123,16 +122,16 @@ test("Cannot add pokemon with invalid type", async () => {
 });
 
 
-test.only("Can add two pokemon with valid inputs without overwriting", async () => {
+test("Can add two pokemon with valid inputs without overwriting", async () => {
     
-    const { name, type } = genereatePokemonData();
-    console.log("Inside test: Pokemon Info: " +  name +  type);
+    const { name, password } = genereatePokemonData();
+    console.log("Inside test: Pokemon Info: " +  name +  password);
 
     //const { secondName, secondType } = genereatePokemonData();
     //console.log("Inside test: Pokemon Info: " +  secondName +  secondType);
 
-    let pokemon = await model.createPokemon(name,type);
-    let pokemon2 = await model.createPokemon(name,type);
+    let pokemon = await model.createPokemon(name,password);
+    let pokemon2 = await model.createPokemon(name,password);
 
     let database = await utils.readFromJsonFile(dbFile);
 
@@ -142,11 +141,11 @@ test.only("Can add two pokemon with valid inputs without overwriting", async () 
 
     // Check First Pokemon Object
    await expect(database[0].name.toLowerCase() == pokemon.name.toLowerCase()).toBe(true);
-   await expect(database[0].type.toLowerCase() == pokemon.type.toLowerCase()).toBe(true);
+   await expect(database[0].password.toLowerCase() == pokemon.password.toLowerCase()).toBe(true);
 
    // Check second pokemon object
    await expect(database[1].name.toLowerCase() == pokemon2.name.toLowerCase()).toBe(true);
-   await expect(database[1].type.toLowerCase() == pokemon2.type.toLowerCase()).toBe(true);
+   await expect(database[1].password.toLowerCase() == pokemon2.password.toLowerCase()).toBe(true);
 });
 // Read one
 
