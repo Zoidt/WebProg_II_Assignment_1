@@ -201,6 +201,14 @@ test("Can read entire collection", async () => {
     expect(results[2].password.toLowerCase() == password3.toLowerCase()).toBe(true);
 });
 // Update
+test("Can update existing account with valid username", async () => {
 
+});
+test("Can't update existing account with invalid username", async () => {
+
+});
+test("Can't update account that doesn't exist", async () => {
+
+});
 // Delete
 
