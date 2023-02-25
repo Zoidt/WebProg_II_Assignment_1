@@ -12,7 +12,7 @@ let pokemonsCollection;
 let db = "user_account_test"; // collection name
 
 // TODO: Use fakeJS To generate user data when adding or manually make stuff up
-const pokemonData = [
+const userData = [
     {username: 'Bulbasaur' , password: 'Grass'},
     {username: 'Charamander' , password: 'Fire'},
     {username: 'Squirtle' , password: 'Water'},
@@ -33,7 +33,7 @@ const pokemonData = [
 ]
 
 /** Since a  account can only be added to the DB once, we have to splice from the array. */
-const generatePokemonData = () => pokemonData.splice(Math.floor((Math.random() * pokemonData.length)), 1)[0];
+const generateAccountData = () => userData.splice(Math.floor((Math.random() * userData.length)), 1)[0];
 
 // Prep mock database
 let mongod;
@@ -79,9 +79,14 @@ afterEach(async () => {
 // ---------
 
 // Add test 
-/**Investigate issue where querying database when adding causes this test to fail */
+/**
+ * Investigate issue where querying database when adding causes this test to fail 
+ * 
+ * Side note: sometimes length will be 0, other times 1, run test multiple times 
+ * for more accurate results.
+*/
 test("Can add account to DB", async () => {
-    const { username, password } = generatePokemonData();
+    const { username, password } = generateAccountData();
     await model.addAccount(username,password) // add account to database  
 
     // Query database
@@ -99,7 +104,7 @@ test("Can add account to DB", async () => {
 });
 
 test("Cannot add account with an empty username", async () => {
-    const { username, password } = generatePokemonData();
+    const { username, password } = generateAccountData();
     const emptyName = "";
     
     // expect InvalidInputError exception to be thrown
@@ -108,7 +113,7 @@ test("Cannot add account with an empty username", async () => {
 
 
 test("Cannot add account with a number non alphabet/number name", async () => {
-    const { username, password } = generatePokemonData();
+    const { username, password } = generateAccountData();
     const nameWithNumber = "Pikachu1-_";
 
     // expect InvalidInputError exception to be thrown
@@ -116,7 +121,7 @@ test("Cannot add account with a number non alphabet/number name", async () => {
 });
 
 test("Cannot add account with invalid password", async () => {
-    const { username, password } = generatePokemonData();
+    const { username, password } = generateAccountData();
     const  invalidPassword = "Pikachu1_"; //TODO: Allow passwords to have other characters
 
     // expect InvalidInputError exception to be thrown
@@ -130,7 +135,7 @@ test("Cannot add account with invalid password", async () => {
 // Read one
 // while we technically didnt need this one because the add queries, good to check
 test("Can read existing account ", async () => {
-    const { username, password } = generatePokemonData();
+    const { username, password } = generateAccountData();
     await model.addAccount(username,password) // add account to database  
     
     // Query database
@@ -151,7 +156,7 @@ test("Can read existing account ", async () => {
 test("Cannot read account that doesn't exist (Valid name)", async () => {
 
     // Add some accounts to the database
-    const { username, password } = generatePokemonData();
+    const { username, password } = generateAccountData();
     // TODO: use fakerJS for fake usernames and passwords
     await model.addAccount(username,password) // add account to database  
     await model.addAccount("Zaid","123467GoodPassword") 
@@ -165,20 +170,35 @@ test("Cannot read account that doesn't exist (Valid name)", async () => {
 });
 
 // Read many 
-test("Cannot read account that doesn't exist (Valid name)", async () => {
+test("Can read entire collection", async () => {
 
     // Add some accounts to the database
-    const { username, password } = generatePokemonData();
-    // TODO: use fakerJS for fake usernames and passwords
+    const { username, password } = generateAccountData();
+    let username2 ="Zaid";
+    let password2 = "123467GoodPassword";
+    let username3 ="Ahmed";
+    let password3 = "123ShorterPassword";
+
     await model.addAccount(username,password) // add account to database  
-    await model.addAccount("Zaid","123467GoodPassword") 
-    await model.addAccount("Ahmed","123ShorterPassword")  
+    await model.addAccount(username2,password2);
+    await model.addAccount(username3,password3);
 
-    let notRealUsername = "KuiHuaReal";
-    let result = await model.getSingleAccount(notRealUsername);
+    let results = await model.getAllAccounts();
 
-    // Check account that doesn't exist
-    await expect(result == null).toBe(true);
+    // Check Array 
+    expect(Array.isArray(results)).toBe(true);
+    expect(results.length).toBe(3);
+
+    // Check all accounts that we just created.
+    // Account 1 
+    expect(results[0].username.toLowerCase() == username.toLowerCase()).toBe(true);
+    expect(results[0].password.toLowerCase() == password.toLowerCase()).toBe(true);
+    // Account 2
+    expect(results[1].username.toLowerCase() == username2.toLowerCase()).toBe(true);
+    expect(results[1].password.toLowerCase() == password2.toLowerCase()).toBe(true);
+    // Account 3
+    expect(results[2].username.toLowerCase() == username3.toLowerCase()).toBe(true);
+    expect(results[2].password.toLowerCase() == password3.toLowerCase()).toBe(true);
 });
 // Update
 
