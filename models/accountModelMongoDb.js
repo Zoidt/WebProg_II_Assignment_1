@@ -103,7 +103,7 @@ async function addAccount(username, password){
                 // creates and returns new account object if successful
                 if(await !accountCollection.insertOne( { username: username, password: password } ))
                     throw new DatabaseError(`Error while inserting account into db: ${username}, ${password}`);
-                    
+
                 // Return account object
                     return { username: username, password: password };
         }
@@ -126,7 +126,7 @@ async function addAccount(username, password){
  * Queries database for a single instance of an account with the username
  * that was passed in.
  * @param {*} username to find in database.
- * @returns Account object or Undefined if pokemon was not found.
+ * @returns Account object or null if pokemon was not found.
  * @throws DatabaseError if fails to read from database.
  */
 async function getSingleAccount(username){

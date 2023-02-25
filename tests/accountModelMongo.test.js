@@ -87,7 +87,7 @@ test("Can add account to DB", async () => {
     // Query database
     const cursor = await model.getCollection();
     let results = await cursor.find({username: username}).toArray();// Convert query to array
-    console.log("Inside of test, results values is: " + results[0].username)
+    //console.log("Inside of test, results values is: " + results[0].username)
     // Check Array 
     expect(Array.isArray(results)).toBe(true);
     expect(results.length).toBe(1);
@@ -117,10 +117,10 @@ test("Cannot add account with a number non alphabet/number name", async () => {
 
 test("Cannot add account with invalid password", async () => {
     const { username, password } = generatePokemonData();
-    const  invalidType = "Pikachu1";
+    const  invalidPassword = "Pikachu1_"; //TODO: Allow passwords to have other characters
 
     // expect InvalidInputError exception to be thrown
-    await expect(()=> model.addAccount(username,invalidType)).rejects.toThrow(InvalidInputError);
+    await expect(()=> model.addAccount(username,invalidPassword)).rejects.toThrow(InvalidInputError);
 });
 
 // -------------
@@ -157,12 +157,29 @@ test("Cannot read account that doesn't exist (Valid name)", async () => {
     await model.addAccount("Zaid","123467GoodPassword") 
     await model.addAccount("Ahmed","123ShorterPassword")  
 
-    // Check PokemonTODO: Update expect
-    await expect(()=> model.getSingleAccount(username)).rejects.toThrow(InvalidInputError);
+    let notRealUsername = "KuiHuaReal";
+    let result = await model.getSingleAccount(notRealUsername);
+
+    // Check account that doesn't exist
+    await expect(result == null).toBe(true);
 });
 
 // Read many 
+test("Cannot read account that doesn't exist (Valid name)", async () => {
 
+    // Add some accounts to the database
+    const { username, password } = generatePokemonData();
+    // TODO: use fakerJS for fake usernames and passwords
+    await model.addAccount(username,password) // add account to database  
+    await model.addAccount("Zaid","123467GoodPassword") 
+    await model.addAccount("Ahmed","123ShorterPassword")  
+
+    let notRealUsername = "KuiHuaReal";
+    let result = await model.getSingleAccount(notRealUsername);
+
+    // Check account that doesn't exist
+    await expect(result == null).toBe(true);
+});
 // Update
 
 // Delete

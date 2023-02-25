@@ -42,7 +42,7 @@ const { InvalidInputError } = require("./InvalidInputError")
     }
     // TODO: Check if password is minimum length (6) and has 1 number
     // name valid, check type
-    if(!validator.isAlphanumeric(password)) 
+    if(validator.isAlphanumeric(password)) 
         return true;
     
     // TODO: Update error message
