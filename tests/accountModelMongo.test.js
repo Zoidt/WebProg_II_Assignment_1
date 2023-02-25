@@ -78,7 +78,7 @@ afterEach(async () => {
 // ----------------------------------------------------------------
 
 // Add test 
-test.only("Can add pokemon to DB", async () => {
+test("Can add pokemon to DB", async () => {
     const { username, password } = generatePokemonData();
     await model.addAccount(username,password) // add pokemon to database  
 
@@ -97,16 +97,16 @@ test.only("Can add pokemon to DB", async () => {
 });
 
 test("Cannot add pokemon with an empty name", async () => {
-    const { name, password } = genereatePokemonData();
+    const { username, password } = generatePokemonData();
     const emptyName = "";
 
     // Check Pokemon TODO: Update expect
-    await expect(()=> model.createPokemon(emptyName,password)).rejects.toThrow(InvalidInputError);
+    await expect(()=> model.addAccount(emptyName,password)).rejects.toThrow(InvalidInputError);
 });
 
 
 test("Cannot add pokemon with a number in name.", async () => {
-    const { name, password } = genereatePokemonData();
+    const { username, password } = generatePokemonData();
     const nameWithNumber = "Pikachu1";
 
     // Check PokemonTODO: Update expect
