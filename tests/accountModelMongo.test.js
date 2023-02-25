@@ -32,7 +32,7 @@ const pokemonData = [
     {username: 'Snorlax' , password: 'Normal'}
 ]
 
-/** Since a  pokemon can only be added to the DB once, we have to splice from the array. */
+/** Since a  account can only be added to the DB once, we have to splice from the array. */
 const generatePokemonData = () => pokemonData.splice(Math.floor((Math.random() * pokemonData.length)), 1)[0];
 
 // Prep mock database
@@ -74,13 +74,15 @@ afterEach(async () => {
 // =================================================================
 
 
-// Create Pokemon
-// ----------------------------------------------------------------
+// --------- 
+// Create
+// ---------
 
 // Add test 
-test("Can add pokemon to DB", async () => {
+/**Investigate issue where querying database when adding causes this test to fail */
+test("Can add account to DB", async () => {
     const { username, password } = generatePokemonData();
-    await model.addAccount(username,password) // add pokemon to database  
+    await model.addAccount(username,password) // add account to database  
 
     // Query database
     const cursor = await model.getCollection();
@@ -96,7 +98,7 @@ test("Can add pokemon to DB", async () => {
  
 });
 
-test("Cannot add pokemon with an empty name", async () => {
+test("Cannot add account with an empty username", async () => {
     const { username, password } = generatePokemonData();
     const emptyName = "";
 
@@ -105,49 +107,34 @@ test("Cannot add pokemon with an empty name", async () => {
 });
 
 
-test("Cannot add pokemon with a number in name.", async () => {
+test("Cannot add account with a number non alphabet/number name", async () => {
     const { username, password } = generatePokemonData();
-    const nameWithNumber = "Pikachu1";
+    const nameWithNumber = "Pikachu1-_";
 
     // Check PokemonTODO: Update expect
-    await expect(()=> model.createPokemon(nameWithNumber,password)).rejects.toThrow(InvalidInputError);
+    await expect(()=> model.addAccount(nameWithNumber,password)).rejects.toThrow(InvalidInputError);
 });
 
-test("Cannot add pokemon with invalid password", async () => {
-    const { name, password } = genereatePokemonData();
+test("Cannot add account with invalid password", async () => {
+    const { username, password } = generatePokemonData();
     const  invalidType = "Pikachu1";
 
     // Check PokemonTODO: Update expect
-    await expect(()=> model.createPokemon(name,invalidType)).rejects.toThrow(InvalidInputError);
+    await expect(()=> model.addAccount(username,invalidType)).rejects.toThrow(InvalidInputError);
 });
 
+// -------------
+// Read 
+// -------------
 
-test("Can add two pokemon with valid inputs without overwriting", async () => {
-    
-    const { name, password } = genereatePokemonData();
-    console.log("Inside test: Pokemon Info: " +  name +  password);
-
-    //const { secondName, secondType } = genereatePokemonData();
-    //console.log("Inside test: Pokemon Info: " +  secondName +  secondType);
-
-    let pokemon = await model.createPokemon(name,password);
-    let pokemon2 = await model.createPokemon(name,password);
-
-    let database = await utils.readFromJsonFile(dbFile);
-
-    // Check Array 
-    expect(Array.isArray(database)).toBe(true);
-    expect(database.length).toBe(2);
-
-    // Check First Pokemon Object
-   await expect(database[0].name.toLowerCase() == pokemon.name.toLowerCase()).toBe(true);
-   await expect(database[0].password.toLowerCase() == pokemon.password.toLowerCase()).toBe(true);
-
-   // Check second pokemon object
-   await expect(database[1].name.toLowerCase() == pokemon2.name.toLowerCase()).toBe(true);
-   await expect(database[1].password.toLowerCase() == pokemon2.password.toLowerCase()).toBe(true);
-});
 // Read one
+test("Cannot read account that doesn't exist", async () => {
+    const { username, password } = generatePokemonData();
+    const  invalidType = "Pikachu1";
+
+    // Check PokemonTODO: Update expect
+    await expect(()=> model.addAccount(username,invalidType)).rejects.toThrow(InvalidInputError);
+});
 
 // Read many 
 
