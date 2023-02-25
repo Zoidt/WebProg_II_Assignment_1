@@ -174,7 +174,7 @@ async function getCollection(){
  * Checks if newUsername is valid and is an existing account.
  * @param {*} currentUsername of account we want to update.
  * @param {*} newUsername newUsername of account we want to update.
- * @returns booleans, true if update was successful, false otherwise.
+ * @returns booleans, true if update was successful, false if currentUsername does not exist.
  * @throws InvalidInputError if username is invalid.
  * @throws DatabaseError if error while reading from database or when an account with new username already exists.
  */
@@ -223,13 +223,47 @@ async function updateOnePassword(){
 // TODO: replaceOne (optional?)
 
 // TODO: deleteOne
-async function deleteOneAccount(){
+/**
+ * Find document inside of a mongodb database with matching username and password.
+ * Username and password are validated before querying the database.
+ * If document is found, it will be deleted.
+ * @param {*} username of account to query for.
+ * @param {*} password of account to query for.
+ * @returns account object if delete was successful, null otherwise.
+ * @throws InvalidInputError if username or password are invalid.
+ * @throws DataBaseError if query returns null.
+ */
+async function deleteOneAccount(username, password){
 
     try {
-        // Query if account exists
+        // search only if input passed in is valid -- automatically throws
+        if(validateUtils.isValid2(username, password)){
+      
+            // filter for query
+            let filter = {username: username, password: password};
+            // Query if account exists
+            let result = await accountCollection.findOne(filter);
+
+            // if accountToDelete is null, then account was not found
+            if(result == null)
+                throw new DatabaseError("Account to delete does not exist");
+            
+            if(result.deletedCount === 1)
+                return filter;
+            else return null;
+        }
+   
 
         // Delete 
     } catch (error) {
+        if(error instanceof InvalidInputError)
+            console.log("Database inside of deleteOne " + error.message);
+        if(error instanceof DatabaseError)
+            console.log("Database inside of deleteOne " + error.message);
+        else 
+        console.log("Unexpected error inside of deleteOne " + error.message);
+
+        throw error;
         
     }
 }

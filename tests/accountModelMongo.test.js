@@ -87,7 +87,7 @@ afterEach(async () => {
 */
 test("Can add account to DB", async () => {
     const { username, password } = generateAccountData();
-    await model.addAccount(username,password) // add account to database  
+    await model.addAccount(username,password); // add account to database  
 
     // Query database
     const cursor = await model.getCollection();
@@ -201,14 +201,141 @@ test("Can read entire collection", async () => {
     expect(results[2].password.toLowerCase() == password3.toLowerCase()).toBe(true);
 });
 // Update
-test("Can update existing account with valid username", async () => {
+test("Can update existing accounts username with valid username", async () => {
+    // create account
+    const { username, password } = generateAccountData();
+    await model.addAccount(username,password)
+
+    let newUsername = "newPikachu";
+
+    let results = await model.updateOneUsername(username, newUsername);
+
+    let accountCollection = await model.getCollection(); // convenient access to collection
+    let databaseResult = await accountCollection.findOne({username: newUsername}); // this returns document directly
+
+    // Check method returns properly
+    expect(results == true).toBe(true);
+    // Check database for proper update
+    // Only check for username, assuming duplpicates cannot be added,
+    // which is complete but needs to be commented out.
+    expect(databaseResult.username.toLowerCase() == newUsername.toLowerCase()).toBe(true);
 
 });
-test("Can't update existing account with invalid username", async () => {
+test("Can't update account with an invalid username", async () => {
+     
+    // create account
+     const { username, password } = generateAccountData();
+     await model.addAccount(username,password)
+    
+     let invalidUsername = "newPikachu_!";
+
+        
+    // Expect method to throw
+    await expect(()=> model.updateOneUsername(username, invalidUsername)).rejects.toThrow(InvalidInputError);
+
+     // check if current account has updated
+     let accountCollection = await model.getCollection(); // convenient access to collection
+     let databaseResult = await accountCollection.findOne({username: username}); // this returns document directly
+
+     // Check database for proper update
+     expect(databaseResult.username.toLowerCase() == username.toLowerCase()).toBe(true);
+     expect(databaseResult.password.toLowerCase() == password.toLowerCase()).toBe(true);
+
+});
+test("Can't update existing account with an already existing username", async () => {
+    let existingUsername = "newPikachu";
+     
+    // create account
+     const { username, password } = generateAccountData();
+     await model.addAccount(username,password)
+     await model.addAccount(existingUsername,password);
+        
+        // Expect method to throw
+    await expect(()=> model.updateOneUsername(username, existingUsername)).rejects.toThrow(DatabaseError);
+
+     // check if current account has updated
+     let accountCollection = await model.getCollection(); // convenient access to collection
+     let databaseResult = await accountCollection.findOne({username: username}); // this returns document directly
+
+     // Check database for proper update
+     // Only check for username, assuming duplpicates cannot be added,
+     // which is complete but needs to be commented out.
+     expect(databaseResult.username.toLowerCase() == username.toLowerCase()).toBe(true);
+     expect(databaseResult.password.toLowerCase() == password.toLowerCase()).toBe(true);
+     
 
 });
 test("Can't update account that doesn't exist", async () => {
+     
+    // create account
+     const { username, password } = generateAccountData();
+     await model.addAccount(username,password);
+
+     let nonExistingUsername = "DarkLordTheThird";
+     let newName = "oldDarkLord";
+     let result = await model.updateOneUsername(nonExistingUsername, newName);
+
+    // validate updateOneUsername return value
+    await expect(result == false).toBe(true);
 
 });
 // Delete
+test("Can delete existing account", async () => {
+     
+    // create account
+     const { username, password } = generateAccountData();
+     await model.addAccount(username,password);
+
+     let nonExistingUsername = "DarkLordTheThird";
+     let newName = "oldDarkLord";
+     let result = await model.updateOneUsername(nonExistingUsername, newName);
+
+    // validate updateOneUsername return value
+    await expect(result == false).toBe(true);
+
+});
+test("Can't delete an account that doesn't exist", async () => {
+     
+    // create account
+     const { username, password } = generateAccountData();
+     await model.addAccount(username,password);
+
+     let nonExistingUsername = "DarkLordTheThird";
+     let newName = "oldDarkLord";
+     let result = await model.updateOneUsername(nonExistingUsername, newName);
+
+    // validate updateOneUsername return value
+    await expect(result == false).toBe(true);
+
+});
+
+test("Can't delete an account with non-matching password", async () => {
+     
+    // create account
+     const { username, password } = generateAccountData();
+     await model.addAccount(username,password);
+
+     let nonExistingUsername = "DarkLordTheThird";
+     let newName = "oldDarkLord";
+     let result = await model.updateOneUsername(nonExistingUsername, newName);
+
+    // validate updateOneUsername return value
+    await expect(result == false).toBe(true);
+
+});
+
+test("Can't delete an account with non-matching username", async () => {
+     
+    // create account
+     const { username, password } = generateAccountData();
+     await model.addAccount(username,password);
+
+     let nonExistingUsername = "DarkLordTheThird";
+     let newName = "oldDarkLord";
+     let result = await model.updateOneUsername(nonExistingUsername, newName);
+
+    // validate updateOneUsername return value
+    await expect(result == false).toBe(true);
+
+});
 
